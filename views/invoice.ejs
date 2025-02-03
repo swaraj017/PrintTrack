@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice - <%= invoiceId %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <style>
+        @media print {
+      body {
+        padding: 0;
+        background: white;
+        color: black;
+      }
+
+      .container {
+        width: 100%;
+        padding: 20px;
+        background: white;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      button {
+        display: none; /* Hide the button during print */
+      }
+    }
+
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f7f9fc;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 20px;
+    }
+    .logo {
+      max-width: 200px;
+      height: auto;
+    }
+    .company-info {
+      text-align: right;
+      font-weight: 600;
+    }
+    .company-info h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #1a202c;
+    }
+    .company-info p {
+      margin: 5px 0;
+      color: #4a5568;
+      font-size: 16px;
+    }
+    .invoice-details {
+      background-color: #ebf8ff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    .invoice-details h2 {
+      margin: 0 0 15px 0;
+      color: #2b6cb0;
+      font-size: 24px;
+    }
+    .invoice-details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .invoice-details-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .invoice-details-item span:first-child {
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 14px;
+    }
+    .invoice-details-item span:last-child {
+      font-size: 16px;
+      color: #2d3748;
+    }
+    .customer-details, .products {
+      margin-bottom: 30px;
+    }
+    .customer-details h3, .products h3 {
+      color: #2b6cb0;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    thead th {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f7fafc;
+    }
+    tbody tr:hover {
+      background-color: #e2e8f0;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .total {
+      font-size: 24px;
+      font-weight: 700;
+      text-align: right;
+      color: #2b6cb0;
+      margin-top: 30px;
+      padding: 20px 0;
+      border-top: 3px solid #e2e8f0;
+    }
+    .status {
+      display: inline-block;
+      padding: 10px 20px;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-radius: 20px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    .paid {
+      background-color: #c6f6d5;
+      color: #2f855a;
+    }
+    .pending {
+      background-color: #feebc8;
+      color: #c05621;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+      color: #4a5568;
+      font-size: 16px;
+    }
+    .footer a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+    .footer p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="invoice-details">
+      <h2>Invoice Details</h2>
+      <div class="invoice-details-grid">
+        <div class="invoice-details-item">
+          <span>Invoice Number</span>
+          <span><%= invoiceId %></span>
+        </div>
+        <div class="invoice-details-item">
+          <span>Order ID</span>
+          <span><%= orderId %></span>
+        </div>
+        <div class="invoice-details-item">
+          <span>Invoice Date</span>
+          <span><%= invoiceDate %></span>
+        </div>
+        <div class="invoice-details-item">
+          <span>Due Date</span>
+          <span><%= dueDate %></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="customer-details">
+      <h3>Customer Details</h3>
+      <table>
+        <tr>
+          <th>Customer ID</th>
+          <td><%= customerId %></td>
+        </tr>
+        <tr>
+          <th>Name</th>
+          <td><%= customerName %></td>
+        </tr>
+        <tr>
+          <th>Address</th>
+          <td><%= customerAddress %></td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td><%= customerEmail %></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="products">
+      <h3>Products</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.forEach(product => { %>
+            <tr>
+              <td><%= product.productId %></td>
+              <td><%= product.productName %></td>
+              <td><%= product.quantity %></td>
+              <td>₹<%= product.price %></td>
+              <td>₹<%= product.total %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="total">
+      <div class="status <%= status %>" style="margin-top: 0;">
+        <%= status %>
+      </div>
+      <p>Total Amount: ₹<%= totalAmount %></p>
+    </div>
+
+    <button id="downloadPdf" onclick="printInvoice();" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      Print Invoice
+    </button>
+
+    <div class="footer">
+      <p>Thank You!</p>
+    </div>
+  </div>
+
+  <script>
+    function printInvoice() {
+      window.print(); // Trigger the print dialog
+    }
+  </script>
+  </div>
+  
+</body>
+</html>

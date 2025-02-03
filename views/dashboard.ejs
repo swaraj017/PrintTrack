@@ -1,0 +1,283 @@
+<%- include("includes/nav.ejs") %>
+
+
+    <head>
+
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            .main-content {
+                flex: 1;
+                padding: 32px;
+            }
+
+            .metrics {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 24px;
+                margin-bottom: 36px;
+            }
+
+            .metric-card {
+                background: white;
+                padding: 24px;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+                transition: transform 0.3s ease;
+            }
+
+            .metric-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .metric-icon {
+                width: 56px;
+                height: 56px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 16px;
+                font-size: 24px;
+            }
+
+            .blue-bg {
+                background-color: #4285f4;
+            }
+
+            .yellow-bg {
+                background-color: #fbbc05;
+            }
+
+            .green-bg {
+                background-color: #34a853;
+            }
+
+            .purple-bg {
+                background-color: #a142f4;
+            }
+
+            .metric-content {
+                flex: 1;
+            }
+
+            .metric-title {
+                color: #666;
+                font-size: 14px;
+                margin-bottom: 4px;
+                font-weight: 500;
+            }
+
+            .metric-value {
+                font-size: 28px;
+                font-weight: 700;
+                color: #1a1a1a;
+            }
+
+            .section-container {
+                display: grid;
+                grid-template-columns: 3fr 2fr;
+                gap: 24px;
+            }
+
+            .recent-section {
+                background: white;
+                padding: 24px;
+                border-radius: 16px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            }
+
+            .section-title {
+                font-size: 20px;
+                margin-bottom: 20px;
+                color: #1a1a1a;
+                font-weight: 600;
+            }
+
+            .order-item,
+            .invoice-item {
+                display: flex;
+                justify-content: space-between;
+                padding: 16px;
+                border-radius: 12px;
+                margin-bottom: 16px;
+                background: #f9fafc;
+                transition: all 0.3s ease;
+            }
+
+            .order-item:hover,
+            .invoice-item:hover {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                transform: translateY(-2px);
+            }
+
+            .order-details,
+            .invoice-details {
+                color: #666;
+                font-size: 14px;
+                margin-top: 4px;
+            }
+
+            .status {
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 500;
+                margin-left: 8px;
+            }
+
+            .partial {
+                background: #fff3dc;
+                color: #997000;
+            }
+
+            .pending {
+                background: #fff3dc;
+                color: #997000;
+            }
+
+            .paid {
+                background: #e6ffe6;
+                color: #006600;
+            }
+
+            .progress-bar {
+                height: 6px;
+                background: #eee;
+                border-radius: 3px;
+                margin-top: 12px;
+                width: 200px;
+                overflow: hidden;
+            }
+
+            .progress {
+                height: 100%;
+                background: #4285f4;
+                border-radius: 3px;
+                transition: width 0.5s ease-in-out;
+            }
+
+            h3 {
+                font-weight: 600;
+                color: #1a1a1a;
+            }
+        </style>
+    </head>
+
+
+    <body>
+
+
+
+        <div class="main-content">
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-icon blue-bg">
+                        <span style="color: white">📦</span>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-title">Total Orders</div>
+                        <div class="metric-value">2</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon yellow-bg">
+                        <span style="color: white">⏳</span>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-title">Pending Delivery</div>
+                        <div class="metric-value">350 units</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon green-bg">
+                        <span style="color: white">📈</span>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-title">Delivered</div>
+                        <div class="metric-value">350 units</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon purple-bg">
+                        <span style="color: white">📄</span>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-title">Invoices</div>
+                        <div class="metric-value">2</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <div class="recent-section">
+                    <h2 class="section-title">Recent Orders</h2>
+
+                    <% if (orders.length> 0) { %>
+                        <% orders.forEach(order=> { %>
+                  
+                            <a href="/order/<%= order._id %>">
+                                <div class="order-item">
+                                    <div>
+                                        <h3>
+                                            <%= order.productName %>
+                                        </h3>  
+                                        <div class="order-details">Order ID: <%= order._id %>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress"
+                                                style="width: <%= (order.orderDetail[0].deliverdQuantity / order.orderDetail[0].totalQuantity) * 100 %>%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right">
+                                        <div>
+                                            <%= order.orderDetail[0].deliverdQuantity %> / <%=
+                                                    order.orderDetail[0].totalQuantity %> units
+                                        </div>
+                                        <div class="order-details">Ordered on <%= order.orderDate.toDateString() %>
+                                        </div>
+                                        <span
+                                            class="status <%= order.orderDetail[0].pendingQuantity > 0 ? 'partial' : 'complete' %>">
+                                            <%= order.orderDetail[0].pendingQuantity> 0 ? 'Partial' : 'Complete' %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                            <% }) %>
+                                <% } else { %>
+                                    <p>No orders found for this user.</p>
+                                    <% } %>
+
+                </div>
+
+
+                <div class="recent-section">
+                    <h2 class="section-title">Recent Invoices</h2>
+                    <div class="invoice-item">
+                        <div>
+                            <h3>INV-001</h3>
+                            <div class="invoice-details">Order #1</div>
+                            <div class="invoice-details">150 units</div>
+                        </div>
+                        <div style="text-align: right">
+                            <div>$15,000</div>
+                            <span class="status pending">Pending</span>
+                        </div>
+                    </div>
+                    <div class="invoice-item">
+                        <div>
+                            <h3>INV-002</h3>
+                            <div class="invoice-details">Order #2</div>
+                            <div class="invoice-details">200 units</div>
+                        </div>
+                        <div style="text-align: right">
+                            <div>$20,000</div>
+                            <span class="status paid">Paid</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>

@@ -1,0 +1,191 @@
+<%- include("includes/nav.ejs") %>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin-top: 20px;
+            background: #f4f7fc;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            max-width: 1300px;  
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;  
+        }
+
+        .single_advisor_profile {
+            position: relative;
+            width: 100%;
+            max-width: 350px;  
+            margin-bottom: 40px;
+            border-radius: 12px;  
+            box-shadow: 0 8px 25px rgba(47, 91, 234, 0.2);
+            background-color: #ffffff;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+            padding-bottom: 30px;
+            text-align: center;
+        }
+
+        .single_advisor_profile:hover {
+            transform: translateY(-20px);  
+        }
+
+        .advisor_thumb {
+            position: relative;
+            background-color: #3f43fd;
+            padding: 40px;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+            transition: background-color 0.3s;
+        }
+
+        .advisor_thumb img {
+            width: 150px;  
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .social-info {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+        }
+
+        .social-info a {
+            font-size: 20px;  
+            color: #ffffff;
+            padding: 10px;
+            transition: color 0.3s;
+        }
+
+        .social-info a:hover {
+            color: #3f43fd;
+        }
+
+        .single_advisor_details_info {
+            padding: 25px;
+            background-color: #ffffff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .single_advisor_details_info h3 {
+            font-size: 24px;  
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .single_advisor_details_info p {
+            font-size: 16px;  
+            color: #7d7d7d;
+        }
+
+        .single_advisor_profile:hover .advisor_thumb {
+            background-color: #070a57;
+        }
+
+        .single_advisor_profile:hover .single_advisor_details_info {
+            background-color: #070a57;
+            color: #ffffff;
+        }
+
+        .single_advisor_profile:hover .single_advisor_details_info h3 {
+            color: #ffffff;
+        }
+
+        .single_advisor_profile:hover .single_advisor_details_info p {
+            color: #ffffff;
+        }
+
+        @media only screen and (max-width: 1024px) {
+            .single_advisor_profile {
+                max-width: 400px;  
+            }
+
+            .advisor_thumb img {
+                width: 140px;
+                height: 140px;
+            }
+
+            .social-info a {
+                font-size: 18px;
+            }
+
+            .single_advisor_details_info h3 {
+                font-size: 22px;
+            }
+
+            .single_advisor_details_info p {
+                font-size: 14px;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            .single_advisor_profile {
+                max-width: 100%;  
+                margin-bottom: 20px;
+            }
+
+            .advisor_thumb img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .social-info a {
+                font-size: 16px;
+            }
+
+            .single_advisor_details_info h3 {
+                font-size: 20px;
+            }
+
+            .single_advisor_details_info p {
+                font-size: 14px;
+            }
+        }
+
+    </style>
+</head>
+
+<div class="container">
+    <div class="row">
+         
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="single_advisor_profile wow fadeInUp" data-wow-delay="0.3s">
+              
+                <div class="advisor_thumb">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Advisor Profile Picture">
+                   
+                    <div class="social-info">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </div>
+                </div>
+                 
+                <div class="single_advisor_details_info">
+                    <h3>User Name</h3>
+                    <p class="designation">designation</p>
+                </div>
+            </div>
+        </div>
+         
+    </div>
+</div>
