@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent Orders</title>
+    <link rel="stylesheet" href="/css/subcustomer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<%- include("includes/nav.ejs") %>
+
+<div class="subcustomer-details">
+    <div class="orders-title">
+        <i class="fas fa-shopping-bag"></i>
+        Recent Orders
+    </div>
+
+    <!-- Search Section -->
+    <div class="filter-container">
+        <input 
+            type="text" 
+            id="orderSearch" 
+            class="search-bar" 
+            placeholder="Search orders by Type..."
+        >
+        <div class="date-selector">
+            <label for="orderDateFilter">Filter by Date: </label>
+            <input 
+                type="date" 
+                id="orderDateFilter" 
+                class="date-filter"
+            >
+        </div>
+    </div>
+
+    <div class="orders-section" id="ordersSection">
+        <% if (orders.length > 0) { %>
+            <% orders.forEach(function(order) { %>
+                <div class="order-item" data-product="<%= order.productName.toLowerCase() %>" data-order-date="<%= order.orderDate %>">
+                    <div class="order-detail">
+                        <i class="fas fa-box"></i>
+                        <%= order.productName %>
+                    </div>
+                    <div class="order-detail">
+                        <i class="fas fa-hashtag"></i>
+                        <%= order.quantity %> units
+                    </div>
+                    <div class="order-detail">
+                        <i class="fas fa-calendar"></i>
+                        <%= order.orderDate.toDateString() %>
+                        <a href="/download-receipt?orderId=<%= order.orderId.toString() %>">
+                            <button type="button">Download Receipt</button>
+                        </a>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No orders found for this sub-customer.</p>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('orderSearch');
+        const dateFilterInput = document.getElementById('orderDateFilter');
+        const orderItems = document.querySelectorAll('.order-item');
+
+        function filterOrders() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const filterDate = dateFilterInput.value;
+            
+            orderItems.forEach(order => {
+                const productName = order.getAttribute('data-product');
+                const orderDate = new Date(order.getAttribute('data-order-date'));
+                const matchesSearch = productName.includes(searchTerm);
+
+                let matchesDate = true;
+                if (filterDate) {
+                    matchesDate = orderDate.toISOString().split('T')[0] === filterDate;
+                }
+
+                if (matchesSearch && matchesDate) {
+                    order.style.display = 'flex';
+                } else {
+                    order.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterOrders);
+        dateFilterInput.addEventListener('change', filterOrders);
+    });
+</script>
+
+</body>
+</html>

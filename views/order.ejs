@@ -5,100 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Customization and Invoice Generator</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .container {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        h1, h2, h3 {
-            color: #2c3e50;
-        }
-        .order-customization {
-            margin-bottom: 30px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .serial-list {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-        .serial-item {
-            display: inline-block;
-            margin: 5px;
-            padding: 5px 10px;
-            background-color: #e0e0e0;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        .serial-item.selected {
-            background-color: #3498db;
-            color: #fff;
-        }
-        #invoicePreview {
-            border: 1px solid #ddd;
-            padding: 20px;
-            background-color: #fff;
-        }
-        .selection-mode {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Order Customization and Invoice Generator</h1>
+    <h1>Order Customization and Customer Allocation Form</h1>
     
     <div class="container order-customization">
         <h2>Order Customization</h2>
@@ -114,147 +24,191 @@
                 <% order.orderDetail.forEach((detail, index) => { %>
                     <tr>
                         <td><%= detail.productId %></td>
-                        <td><%= detail.deliverdQuantity %></td>
-                        <td><button onclick="selectSerials(<%= JSON.stringify(detail.serialArray) %>, <%= index %>)">Select Serials</button></td>
+                        <td><%= detail.deliveredQuantity %></td>
+                        <td>
+                             <button onclick="selectSerials(<%= JSON.stringify(serialArray[index]) %>, <%= index %>)">Select Serials</button>
+                        </td>
                     </tr>
                 <% }); %>
             </tbody>
         </table>
         
         <div id="serialSelection" style="display: none;">
-            <h3>Serial Number Selection</h3>
-            <div class="selection-mode">
-                <button onclick="setSelectionMode('range')">Range Selection</button>
-                <button onclick="setSelectionMode('individual')">Individual Selection</button>
+            <h2 style="color: green; margin-left: 27rem;">Quantity Selection</h2>
+            <div class="selection-mode" style="display: none;">
+                <button onclick="setSelectionMode('quantity')">Quantity Selection</button>
             </div>
-            <div id="rangeSelection" style="display: none;">
-                <label for="startSerial">Start Serial:</label>
-                <input type="number" id="startSerial" min="1">
-                <label for="endSerial">End Serial:</label>
-                <input type="number" id="endSerial" min="1">
-                <button onclick="filterSerialRange()">Apply Range</button>
-            </div>
-            <div id="individualSelection" style="display: none;">
-                <input type="text" id="serialFilter" placeholder="Filter serials" oninput="filterSerials()">
+            <div id="quantitySelection" style="display: none;">
+                <label for="quantity" style="font-size: 22px;">Enter Quantity:</label>
+                <input type="number" id="quantity" min="1" placeholder="Enter quantity to select" style="width: 50%;">
+                <button onclick="applyQuantitySelection()">Apply Quantity</button>
             </div>
             <div id="serialList" class="serial-list">
                 <!-- Serial numbers will be populated here -->
             </div>
-            <label for="selectedQuantity">Selected Quantity:</label>
-            <input type="number" id="selectedQuantity" readonly>
-            <button onclick="confirmSelection()" style="display: none;">Confirm Selection</button>
+            <form action="/add-subcustomer" method="POST">
+                <div class="search_content" style="display: flex;">
+                    <label for="selectedQuantity" style="color: green; font-size: 20px;">Selected Quantity:</label>
+                    <input type="number" id="selectedQuantity" readonly style="width: 20%;">
+                    <input type="hidden" id="hiddenSelectedQuantity" name="selectedQuantity">  
+                    <input type="hidden" id="hiddenSelectedSerials" name="selectedSerials">  
+                    
+                    <button onclick="generateInvoice()" style="display: none;">Preview Invoice</button> 
+                    
+                    <h2 style="color: green; margin-left: 2rem;">Search Customer:</h2>
+                    <select name="" id="customerType" onchange="toggleForm()">
+                        <option value="">Choose Type</option>
+                        <option value="search">Search Customer</option>
+                        <option value="new">New Customer</option>
+                    </select>
+                </div>
+                <!-- Allocation by details -->
+                <div class="New_Customer_Allocation_Form hidden" id="newCustomerForm">
+                    <div class="container">
+                        <div class="filter-section">
+                            <div class="filter-item">
+                                <label for="name">Name:</label>
+                                <input type="text" id="name" name="name" placeholder="Enter Name">
+                            </div>
+                            <div class="filter-item">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" placeholder="Enter Email">
+                            </div>
+                            <div class="filter-item">
+                                <label for="contactNumber">Contact Number:</label>
+                                <input type="text" id="contactNumber" name="contactNumber" placeholder="Enter Contact Number">
+                            </div>
+                            <div class="filter-item">
+                                <label for="address">Address:</label>
+                                <input type="text" id="address" name="address" placeholder="Enter Address">
+                            </div>
+                            
+                            <div class="filter-item">
+                                <label for="productId">Product ID:</label>
+                                <input type="text" id="productId" name="productId">
+                            </div>
+            
+                            <div class="filter-item">
+                                <label for="orderDate">Order Date:</label>
+                                <input type="date" id="orderDate" name="orderDate" min="0" step="0.01" placeholder="Enter Order Date">
+                            </div>
+                        </div>
+                        <button onclick="confirmSelection()">ALLOT</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="Allocation_by_details hidden" id="allocationDetails">
+                <input type="text" placeholder="Search by anything: number, name, email">
+                <button type="submit">Find</button>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <button onclick="generateInvoice()">Preview Invoice</button>
-    </div>
+<script>
+    function toggleForm() {
+        var selectedType = document.getElementById('customerType').value;
+        
+        document.getElementById('allocationDetails').classList.add('hidden');
+        document.getElementById('newCustomerForm').classList.add('hidden');
 
-    <script>
-        let currentSerialArray = [];
-        let currentProductIndex = null;
-        let selectionMode = 'individual';
-        let selectedSerials = [];
-
-        function selectSerials(serials, index) {
-            currentProductIndex = index;
-            currentSerialArray = serials;
-            const serialList = document.getElementById('serialList');
-            serialList.innerHTML = '';
-
-            currentSerialArray.forEach(serial => {
-                const serialItem = document.createElement('div');
-                serialItem.classList.add('serial-item');
-                serialItem.textContent = serial;
-                serialItem.onclick = () => toggleSelection(serialItem, serial);
-                serialList.appendChild(serialItem);
-            });
-
-            document.getElementById('serialSelection').style.display = 'block';
+        if (selectedType === 'search') {
+            document.getElementById('allocationDetails').classList.remove('hidden');
+        } else if (selectedType === 'new') {
+            document.getElementById('newCustomerForm').classList.remove('hidden');
         }
+    }
+</script>
 
-        function toggleSelection(serialItem, serial) {
-            if (selectionMode === 'individual') {
-                const index = selectedSerials.indexOf(serial);
-                if (index === -1) {
-                    selectedSerials.push(serial);
-                    serialItem.classList.add('selected');
-                } else {
-                    selectedSerials.splice(index, 1);
-                    serialItem.classList.remove('selected');
-                }
-                document.getElementById('selectedQuantity').value = selectedSerials.length;
-            }
-        }
+<script>
+    let currentSerialArray = [];
+    let currentProductIndex = null;
+    let selectionMode = 'quantity'; // Default to quantity selection
+    let selectedSerials = [];
 
-        function setSelectionMode(mode) {
-            selectionMode = mode;
-            document.getElementById('rangeSelection').style.display = mode === 'range' ? 'block' : 'none';
-            document.getElementById('individualSelection').style.display = mode === 'individual' ? 'block' : 'none';
-        }
+    function selectSerials(serials, index) {
+        currentProductIndex = index;
+        currentSerialArray = serials;
+        const serialList = document.getElementById('serialList');
+        serialList.innerHTML = '';
 
-        function filterSerialRange() {
-            const start = parseInt(document.getElementById('startSerial').value) - 1;
-            const end = parseInt(document.getElementById('endSerial').value);
-            if (start >= 0 && end <= currentSerialArray.length && start < end) {
-                selectedSerials = currentSerialArray.slice(start, end);
-                updateSerialList();
+        currentSerialArray.forEach(serial => {
+            const serialItem = document.createElement('div');
+            serialItem.classList.add('serial-item');
+            serialItem.textContent = serial;
+            serialItem.onclick = () => toggleSelection(serialItem, serial);
+            serialList.appendChild(serialItem);
+        });
+
+        document.getElementById('serialSelection').style.display = 'block';
+        document.getElementById('quantitySelection').style.display = 'block'; // Show quantity input section
+    }
+
+    function toggleSelection(serialItem, serial) {
+        if (selectionMode === 'quantity') {
+            // Add or remove serial from selection
+            const index = selectedSerials.indexOf(serial);
+            if (index === -1) {
+                selectedSerials.push(serial);
+                serialItem.classList.add('selected');
             } else {
-                alert('Invalid range. Please ensure start is less than end and within the delivered quantity.');
+                selectedSerials.splice(index, 1);
+                serialItem.classList.remove('selected');
             }
-        }
-
-        function filterSerials() {
-            const filterValue = document.getElementById('serialFilter').value.toLowerCase();
-            const serialItems = document.querySelectorAll('.serial-item');
-            serialItems.forEach(item => {
-                const serial = item.textContent.toLowerCase();
-                if (serial.includes(filterValue)) {
-                    item.style.display = 'inline-block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        function updateSerialList() {
-            const serialList = document.getElementById('serialList');
-            serialList.innerHTML = '';
-            const serials = selectionMode === 'range' ? selectedSerials : currentSerialArray;
-            serials.forEach(serial => {
-                const serialItem = document.createElement('div');
-                serialItem.className = 'serial-item';
-                if (selectionMode === 'individual') {
-                    serialItem.classList.toggle('selected', selectedSerials.includes(serial));
-                    serialItem.onclick = () => toggleSelection(serialItem, serial);
-                }
-                serialItem.textContent = serial;
-                serialList.appendChild(serialItem);
-            });
             document.getElementById('selectedQuantity').value = selectedSerials.length;
         }
+    }
 
-        function confirmSelection() {
-            alert(`Selected ${selectedSerials.length} serial numbers`);
+    function setSelectionMode(mode) {
+        selectionMode = mode;
+        document.getElementById('quantitySelection').style.display = mode === 'quantity' ? 'block' : 'none';
+    }
+
+    function applyQuantitySelection() {
+        const quantity = parseInt(document.getElementById('quantity').value);
+        if (quantity > 0 && quantity <= currentSerialArray.length) {
+            selectedSerials = currentSerialArray.slice(0, quantity);
+            updateSerialList();
+        } else {
+            alert('Invalid quantity. Please ensure it is within the available serials.');
         }
+    }
 
-        function generateInvoice() {
-            const orderData = <%- JSON.stringify(order) %>;
-            const product = orderData.orderDetail[currentProductIndex];
-            const serialsToUse = selectedSerials.length > 0 ? selectedSerials : product.serialArray.slice(0, product.deliverdQuantity);
+    function updateSerialList() {
+        const serialList = document.getElementById('serialList');
+        serialList.innerHTML = '';
+        currentSerialArray.slice(0, selectedSerials.length).forEach(serial => {
+            const serialItem = document.createElement('div');
+            serialItem.className = 'serial-item';
+            serialItem.classList.add('selected');
+            serialItem.textContent = serial;
+            serialList.appendChild(serialItem);
+        });
+        document.getElementById('selectedQuantity').value = selectedSerials.length;
+    }
 
-            const queryParams = new URLSearchParams({
-                orderId: orderData._id,
-                customerId: orderData.customerId,
-                orderDate: new Date(orderData.orderDate).toLocaleDateString(),
-                totalPrice: orderData.totalPrice.toLocaleString(),
-                productId: product.productId,
-                quantity: serialsToUse.length,
-                serials: serialsToUse.join(',')
-            });
+    function confirmSelection() {
+        document.getElementById('hiddenSelectedQuantity').value = selectedSerials.length;
+        document.getElementById('hiddenSelectedSerials').value = JSON.stringify(selectedSerials);
+    }
 
-            window.location.href = '/getinvoice?' + queryParams.toString();
-        }
-    </script>
+    function generateInvoice() {
+        const orderData = <%- JSON.stringify(order) %>;
+        const product = orderData.orderDetail[currentProductIndex];
+        const serialsToUse = selectedSerials.length > 0 ? selectedSerials : product.serialArray.slice(0, product.deliveredQuantity);
+
+        const queryParams = new URLSearchParams({
+            orderId: orderData._id,
+            customerId: orderData.customerId,
+            orderDate: new Date(orderData.orderDate).toLocaleDateString(),
+            totalPrice: orderData.totalPrice.toLocaleString(),
+            productId: product.productId,
+            quantity: serialsToUse.length,
+            serials: serialsToUse.join(',')
+        });
+
+        window.location.href = '/getinvoice?' + queryParams.toString();
+    }
+</script>
 </body>
 </html>

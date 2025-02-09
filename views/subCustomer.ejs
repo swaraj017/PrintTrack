@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/subcustomer.css">
+   
+</head>
+<%- include("includes/nav.ejs") %>
+<div class="main-content">
+    <h1 class="page-title">
+        <i class="fas fa-users"></i>
+        Customers List
+    </h1>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input 
+            type="text" 
+            id="customerSearch" 
+            class="search-bar" 
+            placeholder="Search customers by name, email, or phone number..."
+        >
+    </div>
+
+    <div id="customersGrid" class="customers-grid">
+        <% if (subCustomerDetails && subCustomerDetails.length > 0) { %>
+            <% subCustomerDetails.forEach(function(subCustomer) { %>
+                <a href="/customer/<%= subCustomer._id %>" style="text-decoration: none; color: inherit;" class="customer-card-link">
+                    <div class="customer-card" data-name="<%= subCustomer.name %>" data-email="<%= subCustomer.email %>" data-phone="<%= subCustomer.contactNumber %>">
+                        <div class="customer-header">
+                            <div class="customer-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 class="customer-name"><%= subCustomer.name %></h3>
+                        </div>
+                        <div class="customer-details">
+                            <div class="customer-info">
+                                <p>
+                                    <i class="fas fa-envelope email-icon"></i>
+                                    <%= subCustomer.email %>
+                                </p>
+                                <p>
+                                    <i class="fas fa-phone phone-icon"></i>
+                                    <%= subCustomer.contactNumber %>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="customer-address">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><%= subCustomer.address %></span>
+                        </div>
+                    </div>
+                </a>
+            <% }) %>
+        <% } else { %>
+            <div class="customer-card">
+                <div class="customer-header">
+                    <div class="customer-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <p><%= message %></p>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('customerSearch');
+            const customerCards = document.querySelectorAll('.customer-card');
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+
+                customerCards.forEach(card => {
+                    const name = card.getAttribute('data-name').toLowerCase();
+                    const email = card.getAttribute('data-email').toLowerCase();
+                    const phone = card.getAttribute('data-phone').toLowerCase();
+
+                    // Check if search term matches name, email, or phone
+                    const matches = 
+                        name.includes(searchTerm) || 
+                        email.includes(searchTerm) || 
+                        phone.includes(searchTerm);
+
+                    card.closest('.customer-card-link').style.display = matches ? 'block' : 'none';
+                });
+            });
+        });
+    </script>
+</div>
+</html>

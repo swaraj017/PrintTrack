@@ -1,0 +1,60 @@
+<%- include("includes/nav.ejs") %>
+ 
+<head>
+    <link rel="stylesheet" href="/css/myorder.css">
+</head>
+
+<div class="main-container">
+    <div class="full-width-section">
+        <div class="search-box">
+            <h2 class="section-heading">Recent Orders</h2>
+            <input 
+                type="text" 
+                id="orderSearch" 
+                class="search-field" 
+                placeholder="Search orders..."
+            >
+        </div>
+
+        <div class="order-area">
+            <div class="item-list">
+                <% if (orders.length > 0) { %>
+                    <% orders.forEach(order => { %>
+                        <a href="/order/details/<%=order._id %>">
+                        <div class="item-entry">
+                            <div class="left-side">
+                                <strong><%= order.productName %></strong>
+                                <div>Order ID: <%= order._id %></div>
+                            </div>
+                            <div class="right-side">
+                                <%= order.orderDetail[0].deliveredQuantity %> / 
+                                <%= order.orderDetail[0].totalQuantity %> units
+                                <span class="status-indicator <%= order.orderDetail[0].pendingQuantity > 0 ? 'status-in-progress' : 'status-completed' %>">
+                                    <%= order.orderDetail[0].pendingQuantity > 0 ? 'Partial' : 'Complete' %>
+                                </span>
+                            </div>
+                            
+                        </div>
+                    </a>
+                    <% }); %>
+                <% } else { %>
+                    <p>No orders found.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector('.search-field').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        const itemEntries = document.querySelectorAll('.item-entry');
+
+        itemEntries.forEach(item => {
+            const productName = item.querySelector('strong').textContent.toLowerCase();
+            item.style.display = productName.includes(searchTerm) ? 'flex' : 'none';
+        });
+    });
+</script>
+</body>
+</html>

@@ -227,14 +227,14 @@
                                         </div>
                                         <div class="progress-bar">
                                             <div class="progress"
-                                                style="width: <%= (order.orderDetail[0].deliverdQuantity / order.orderDetail[0].totalQuantity) * 100 %>%">
+                                                style="width: <%= (order.orderDetail[0].deliveredQuantity / order.orderDetail[0].totalQuantity) * 100 %>%">
                                             </div>
                                         </div>
                                     </div>
                                     <div style="text-align: right">
                                         <div>
-                                            <%= order.orderDetail[0].deliverdQuantity %> / <%=
-                                                    order.orderDetail[0].totalQuantity %> units
+                                            <%= order.orderDetail[0].deliveredQuantity %> / 
+                                            <%= order.orderDetail[0].totalQuantity %> units
                                         </div>
                                         <div class="order-details">Ordered on <%= order.orderDate.toDateString() %>
                                         </div>

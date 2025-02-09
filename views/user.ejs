@@ -1,191 +1,221 @@
-<%- include("includes/nav.ejs") %>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <title>Profile Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Keep existing styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
         body {
-            margin-top: 20px;
-            background: #f4f7fc;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .container {
-            max-width: 1300px;  
-            margin: 0 auto;
-            padding: 30px;
-        }
-
-        .row {
+            background-color: #f0f2f5;
+            color: #333;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;  
+            min-height: calc(100vh - 15px); /* Reduced height by 15px */
         }
 
-        .single_advisor_profile {
-            position: relative;
-            width: 100%;
-            max-width: 350px;  
-            margin-bottom: 40px;
-            border-radius: 12px;  
-            box-shadow: 0 8px 25px rgba(47, 91, 234, 0.2);
-            background-color: #ffffff;
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out;
-            padding-bottom: 30px;
+        .main-content {
+            flex: 1;
+            padding: 2rem 2rem 1rem; /* Reduced bottom padding */
+            margin-left: 30px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            padding: 2rem 2rem 1.5rem; /* Reduced bottom padding */
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            margin-bottom: 1.5rem; /* Reduced margin */
+            padding-bottom: 1.5rem; /* Reduced padding */
+            border-bottom: 1px solid #eee;
         }
 
-        .single_advisor_profile:hover {
-            transform: translateY(-20px);  
-        }
-
-        .advisor_thumb {
-            position: relative;
-            background-color: #3f43fd;
-            padding: 40px;
-            border-radius: 12px 12px 0 0;
-            overflow: hidden;
-            transition: background-color 0.3s;
-        }
-
-        .advisor_thumb img {
-            width: 150px;  
+        /* Rest of the styles remain the same */
+        .profile-avatar {
+            width: 150px;
             height: 150px;
             border-radius: 50%;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
+            border: 5px solid #4285f4;
+            padding: 5px;
         }
 
-        .social-info {
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-title {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            position: absolute;
-            bottom: 15px;
-            width: 100%;
+            gap: 2rem;
+            
         }
 
-        .social-info a {
-            font-size: 20px;  
-            color: #ffffff;
-            padding: 10px;
-            transition: color 0.3s;
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #666;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
-        .social-info a:hover {
-            color: #3f43fd;
+        .contact-item:hover {
+            background: #f8fafc;
         }
 
-        .single_advisor_details_info {
-            padding: 25px;
-            background-color: #ffffff;
-            transition: background-color 0.3s, color 0.3s;
+        .contact-item i {
+            font-size: 1.2rem;
         }
 
-        .single_advisor_details_info h3 {
-            font-size: 24px;  
-            font-weight: bold;
-            margin-bottom: 12px;
+        .fa-envelope { color: #EA4335; }
+        .fa-phone { color: #34A853; }
+        .fa-map-marker-alt { color: #4285F4; }
+
+        .profile-bio {
+            text-align: center;
+            max-width: 600px;
+            margin: 0.8rem auto; /* Reduced margin */
+            line-height: 1.6;
+            color: #666;
         }
 
-        .single_advisor_details_info p {
-            font-size: 16px;  
-            color: #7d7d7d;
+        .profile-address {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+         
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: #666;
+            transition: all 0.3s ease;
         }
 
-        .single_advisor_profile:hover .advisor_thumb {
-            background-color: #070a57;
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem; /* Reduced margin */
         }
 
-        .single_advisor_profile:hover .single_advisor_details_info {
-            background-color: #070a57;
-            color: #ffffff;
+        .stat-card {
+            background: #f8fafc;
+            padding: 1.2rem; /* Slightly reduced padding */
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
         }
 
-        .single_advisor_profile:hover .single_advisor_details_info h3 {
-            color: #ffffff;
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: #f0f7ff;
         }
 
-        .single_advisor_profile:hover .single_advisor_details_info p {
-            color: #ffffff;
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4285f4;
+            margin-bottom: 0.5rem;
         }
 
-        @media only screen and (max-width: 1024px) {
-            .single_advisor_profile {
-                max-width: 400px;  
-            }
-
-            .advisor_thumb img {
-                width: 140px;
-                height: 140px;
-            }
-
-            .social-info a {
-                font-size: 18px;
-            }
-
-            .single_advisor_details_info h3 {
-                font-size: 22px;
-            }
-
-            .single_advisor_details_info p {
-                font-size: 14px;
-            }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        @media only screen and (max-width: 768px) {
-            .single_advisor_profile {
-                max-width: 100%;  
-                margin-bottom: 20px;
-            }
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
 
-            .advisor_thumb img {
-                width: 120px;
-                height: 120px;
-            }
+        .fa-print.stat-icon { color: #4285F4; }
+        .fa-users.stat-icon { color: #34A853; }
+        .fa-star.stat-icon { color: #FBBC05; }
+        .fa-calendar-check.stat-icon { color: #EA4335; }
 
-            .social-info a {
-                font-size: 16px;
-            }
-
-            .single_advisor_details_info h3 {
-                font-size: 20px;
-            }
-
-            .single_advisor_details_info p {
-                font-size: 14px;
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 1rem 1rem 0.5rem; /* Reduced padding for mobile */
             }
         }
-
     </style>
 </head>
-
-<div class="container">
-    <div class="row">
-         
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="single_advisor_profile wow fadeInUp" data-wow-delay="0.3s">
-              
-                <div class="advisor_thumb">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Advisor Profile Picture">
-                   
-                    <div class="social-info">
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-linkedin"></i></a>
+<body>
+    <%- include("includes/nav.ejs") %>
+    <div class="main-content">
+        <div class="profile-card">
+            <div class="profile-header">
+                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Profile Picture" class="profile-avatar">
+                <h1 class="profile-name"><%= user.name %></h1>
+                <div class="profile-title">Senior Print Designer</div>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <%= user.email %>
+                     
+                        <i class="fas fa-phone"></i>
+                        <%= user.contactNumber %>
                     </div>
                 </div>
-                 
-                <div class="single_advisor_details_info">
-                    <h3>User Name</h3>
-                    <p class="designation">designation</p>
+                <div class="profile-address">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <%= user.address %>
+                </div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <i class="fas fa-print stat-icon"></i>
+                    <div class="stat-value">1,234</div>
+                    <div class="stat-label">Total Prints</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users stat-icon"></i>
+                    <div class="stat-value">89</div>
+                    <div class="stat-label">Active Clients</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-star stat-icon"></i>
+                    <div class="stat-value">4.9</div>
+                    <div class="stat-label">Rating</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-calendar-check stat-icon"></i>
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">On-Time Delivery</div>
                 </div>
             </div>
         </div>
-         
     </div>
-</div>
+</body>
+</html>

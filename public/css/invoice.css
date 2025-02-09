@@ -1,0 +1,195 @@
+ 
+@media print {
+body {
+padding: 0;
+background: white;
+color: black;
+}
+
+.container {
+width: 100%;
+padding: 20px;
+background: white;
+box-shadow: none;
+border-radius: 0;
+}
+
+button {
+display: none; /* Hide the button during print */
+}
+}
+
+body {
+font-family: 'Poppins', Arial, sans-serif;
+margin: 0;
+padding: 20px;
+background-color: #f7f9fc;
+color: #2d3748;
+line-height: 1.6;
+}
+.container {
+width: 100%;
+max-width: 900px;
+margin: 0 auto;
+background-color: #ffffff;
+padding: 40px;
+border-radius: 15px;
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+}
+.header {
+display: flex;
+
+margin-bottom: 40px;
+
+}
+
+.logo {
+max-width: 220px;
+height: auto;
+margin-right: 20px; /* Space between logo and company info */
+}
+
+.company-info {
+text-align: left; /* Align company info to the left */
+flex: 1; /* Make company info take up remaining space */
+}
+
+.company-info h1 {
+font-size: 2.5rem; /* Increased font size */
+}
+
+.company-info p {
+font-size: 1.1rem; /* Increased font size */
+}
+
+.company-info h1 {
+margin: 0;
+font-size: 30px;
+color: #1a202c;
+}
+.company-info p {
+margin: 5px 0;
+color: #4a5568;
+font-size: 16px;
+}
+.invoice-details {
+background-color: #ebf8ff;
+border-radius: 12px;
+padding: 20px;
+margin-bottom: 30px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.invoice-details h2 {
+margin: 0 0 15px 0;
+color: #2b6cb0;
+font-size: 24px;
+}
+.invoice-details-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 20px;
+}
+.invoice-details-item {
+display: flex;
+flex-direction: column;
+}
+.invoice-details-item span:first-child {
+font-weight: 600;
+color: #4a5568;
+font-size: 14px;
+}
+.invoice-details-item span:last-child {
+font-size: 16px;
+color: #2d3748;
+}
+.customer-details, .products {
+margin-bottom: 30px;
+}
+.customer-details h3, .products h3 {
+color: #2b6cb0;
+margin-bottom: 15px;
+font-size: 20px;
+}
+table {
+width: 100%;
+border-collapse: collapse;
+border-radius: 8px;
+overflow: hidden;
+}
+th, td {
+padding: 15px;
+text-align: left;
+border-bottom: 1px solid #e2e8f0;
+}
+thead th {
+background-color: #4CAF50;
+color: white;
+font-weight: bold;
+text-transform: uppercase;
+}
+tbody tr:nth-child(even) {
+background-color: #f7fafc;
+}
+tbody tr:hover {
+background-color: #e2e8f0;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+.total {
+font-size: 24px;
+font-weight: 700;
+text-align: right;
+color: #2b6cb0;
+margin-top: 30px;
+padding: 20px 0;
+border-top: 3px solid #e2e8f0;
+}
+.status {
+display: inline-block;
+padding: 10px 20px;
+font-weight: 600;
+text-transform: uppercase;
+border-radius: 20px;
+font-size: 16px;
+margin-top: 10px;
+}
+.paid {
+background-color: #c6f6d5;
+color: #2f855a;
+}
+.pending {
+background-color: #feebc8;
+color: #c05621;
+}
+.footer {
+text-align: center;
+margin-top: 40px;
+padding-top: 20px;
+border-top: 2px solid #e2e8f0;
+color: #4a5568;
+font-size: 16px;
+}
+.footer a {
+color: #4CAF50;
+text-decoration: none;
+}
+.footer p {
+margin: 5px 0;
+}
+button
+{
+background-color: #34A853; /* Green color */
+color: white; /* White text */
+border-radius: 12px; /* Slightly rounded corners */
+width: 160px; /* Smaller width */
+padding: 8px 16px; /* Adjusted padding for a smaller button */
+font-size: 20px; /* Smaller font size */
+font-weight: bold; /* Bold text */
+text-align: center; /* Center the text */
+border: none; /* Remove default border */
+cursor: pointer; /* Change cursor on hover */
+transition: all 0.3s ease; /* Smooth transition effect */
+margin-left: 2rem;
+}
+ 
