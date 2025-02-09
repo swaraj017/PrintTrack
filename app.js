@@ -30,9 +30,9 @@ app.use(session({
     saveUninitialized: false,
     cookie: { secure: false }
 }));
+require('dotenv').config();
 
-const dburl = "mongodb+srv://swarajgaikwad:swaraj1991@cluster0.ggxns9s.mongodb.net/wholesaler-dashboard?retryWrites=true&w=majority&appName=Cluster0" + '?ssl=true';
-
+const dburl = process.env.Mongo_Url;
 async function main() {
     await mongoose.connect(dburl);
 }
